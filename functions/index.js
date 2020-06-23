@@ -44,11 +44,11 @@ app.get("/user", FBAuth, getAuthenticatedUser);
 app.get("/user/:handle", getUserDetails);
 app.post("/notifications", FBAuth, markNotificationsRead);
 
-// exports.api = functions.region('europe-west1').https.onRequest(app);
-exports.api = functions.https.onRequest(app);
+exports.api = functions.region("europe-west1").https.onRequest(app);
 
-exports.createNotificationOnLike = functions.firestore
-  .document("likes/{id}")
+exports.createNotificationOnLike = functions
+  .region("europe-west1")
+  .firestore.document("likes/{id}")
   .onCreate((snapshot) => {
     return db
       .doc(`/screams/${snapshot.data().screamId}`)
@@ -70,8 +70,9 @@ exports.createNotificationOnLike = functions.firestore
       })
       .catch((err) => console.error(err));
   });
-exports.deleteNotificationOnUnLike = functions.firestore
-  .document("likes/{id}")
+exports.deleteNotificationOnUnLike = functions
+  .region("europe-west1")
+  .firestore.document("likes/{id}")
   .onDelete((snapshot) => {
     return db
       .doc(`/notifications/${snapshot.id}`)
@@ -81,8 +82,9 @@ exports.deleteNotificationOnUnLike = functions.firestore
         return;
       });
   });
-exports.createNotificationOnComment = functions.firestore
-  .document("comments/{id}")
+exports.createNotificationOnComment = functions
+  .region("europe-west1")
+  .firestore.document("comments/{id}")
   .onCreate((snapshot) => {
     return db
       .doc(`/screams/${snapshot.data().screamId}`)
@@ -108,8 +110,9 @@ exports.createNotificationOnComment = functions.firestore
       });
   });
 
-exports.onUserImageChange = functions.firestore
-  .document("/users/{userId}")
+exports.onUserImageChange = functions
+  .region("europe-west1")
+  .firestore.document("/users/{userId}")
   .onUpdate((change) => {
     console.log(change.before.data());
     console.log(change.after.data());
@@ -130,8 +133,9 @@ exports.onUserImageChange = functions.firestore
     } else return true;
   });
 
-exports.onScreamDelete = functions.firestore
-  .document("/screams/{screamId}")
+exports.onScreamDelete = functions
+  .region("europe-west1")
+  .firestore.document("/screams/{screamId}")
   .onDelete((snapshot, context) => {
     const screamId = context.params.screamId;
     const batch = db.batch();
