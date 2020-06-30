@@ -18,7 +18,7 @@ exports.getAllScreams = (req, res) => {
         });
       });
 
-      return res.send(screams);
+      return res.json(screams);
     })
     .catch((err) => {
       console.error(err);
